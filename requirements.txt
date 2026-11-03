@@ -1,0 +1,15 @@
+# PT SFZビルダー 依存パッケージ
+# インストール: python3.14 -m pip install -r requirements.txt
+
+# --- 実行時 ---
+wxPython>=4.2          # GUI（OS の標準の部品を使うのでスクリーンリーダーで読める）
+just_playback>=0.1.8   # 試聴の再生
+
+# macOS の読み上げ名の設定、Pro Tools のプラグインの画面の読み取り、sforzando の画面を押すのに使う
+pyobjc-core>=12.0 ; sys_platform == "darwin"
+pyobjc-framework-Cocoa>=12.0 ; sys_platform == "darwin"
+pyobjc-framework-Quartz>=12.0 ; sys_platform == "darwin"
+pyobjc-framework-ApplicationServices>=12.0 ; sys_platform == "darwin"
+
+# --- 配布版を作るとき ---
+pyinstaller>=6.20

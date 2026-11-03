@@ -1,0 +1,429 @@
+﻿PT SFZ Builder Manual
+
+Version 1.0.0. The author is Takahashi. This software and this manual were made with AI (Anthropic's Claude; see chapter 19).
+Contents. There are 21 chapters.
+1. What this app does
+2. Requirements
+3. Installing
+4. Getting started: build the Splice index
+5. The basic workflow
+6. The window layout
+7. Finding samples
+8. Previewing
+9. Assigning
+10. Loading into sforzando (once for each slot)
+11. Slots and Pro Tools sessions
+12. Cleaning up prepared files
+13. Keyboard commands and menus
+14. Notification sounds and speech
+15. Files the app creates
+16. Troubleshooting
+17. Removing the app
+18. Limits and cautions
+19. Made with AI
+20. License
+21. Version history
+
+== 1. What this app does
+
+This app lets you play audio samples from a MIDI keyboard in Pro Tools, from Splice or from your own files. It is designed to be used with VoiceOver and the keyboard only. "PT" in the name stands for Pro Tools.
+The sound comes from sforzando, a free sampler by Plogue. This app writes a definition file (in a format called SFZ) that says how to arrange the samples, and has sforzando read it. You do not need to operate the sampler's window by sight.
+- Search your Splice samples by word, key, BPM, type (one-shot, loop or FX) and pack
+- In the result list, press Space to preview and Return to assign the sample to the sforzando window in front
+- There are three ways to arrange samples: spread one sound across the keyboard, spread a loop across the keyboard while keeping its speed, or put each selected sound on its own key (a drum kit). By default, the app chooses according to the sample
+- Match a sample's tempo to your Pro Tools session tempo
+- Choose from five combinations of envelope (ADSR) and a muffling filter
+
+VoiceOver reads the results. Operations that take time also signal their start and end with a short sound.
+
+== 2. Requirements
+
+The table has 9 rows and 3 columns: “Item”, “Needed” and “Notes”.
+- Item: A Mac with Apple silicon (M1 or later) / Needed: Yes / Notes: The app does not run on Intel Macs
+- Item: macOS 15 or later / Needed: Yes / Notes: Tested by the author on macOS 15.7.8
+- Item: VoiceOver / Needed: Yes / Notes: Results are read by VoiceOver
+- Item: Pro Tools / Needed: Yes / Notes: Tested by the author on Pro Tools 2026.4.1. Versions with differently built plugin windows may not work
+- Item: sforzando (by Plogue, free) / Needed: Yes / Notes: Install the AAX version. Tested by the author on 1.982 (3.4)
+- Item: A MIDI keyboard / Needed: To play / Notes: You play from a Pro Tools instrument track
+- Item: Splice / Needed: Useful / Notes: You can search the samples in your Splice folder. Without Splice, you can still choose a file to assign
+- Item: ffmpeg / Needed: To keep a loop's speed or match tempo / Notes: Used to change length without changing pitch. Install it with Homebrew (3.5)
+- Item: rubberband / Needed: Improves the sound / Notes: If installed, it is used to change length. Install it with Homebrew
+
+You do not need to install Python or anything like it. It is inside the app.
+The app's window and speech follow your Mac's language settings. The app uses whichever of English and Japanese comes first in your preferred languages, and English if neither is listed. To use a different language for this app only, go to System Settings, General, Language & Region, Applications. The language is decided when the app opens, so reopen the app after changing it.
+
+== 3. Installing
+
+-- 3.1 Put the app in place
+
+1. Open the zip file you received in Finder (select it and press Command-O). A folder named “PT SFZビルダー_1.0.0” appears in the same place
+2. Move “PT SFZビルダー.app” from that folder to the Applications folder. When your Mac is in English, Finder shows it as PT SFZ Builder. In Finder, select the app and press Command-C, then press Option-Command-V in the Applications folder to move it
+3. The manual and the other documents can go anywhere
+
+-- 3.2 Opening the app for the first time
+
+This app is not notarized by Apple. So when you first open an app taken from a zip file downloaded from the internet, macOS may stop it from opening. If so, open it in one of these two ways.
+
+- Method 1: Open it from System Settings
+
+1. Try to open the app once. When you are told it cannot be opened, close the message with Done
+2. Open Privacy & Security in System Settings and go down to Security. There is a sentence saying that PT SFZ Builder was blocked, and an Open Anyway button
+3. Press Open Anyway and approve with your password or Touch ID
+4. Open the app again, and choose Open Anyway when asked to confirm
+
+The exact wording and button names may differ a little between macOS versions. From the second time on, the app opens normally.
+
+- Method 2: Remove the quarantine mark in Terminal
+
+After moving the app to the Applications folder, run this one line in Terminal.
+xattr -dr com.apple.quarantine "/Applications/PT SFZビルダー.app"
+This removes the quarantine mark that files from the internet carry. After that, the app opens normally. The command uses the real file name, which has Japanese characters, even when Finder shows the English name. You can copy it from this manual.
+
+-- 3.3 Give permissions (Accessibility and Automation)
+
+This app reads Pro Tools plugin windows (which plugin on which track) and presses the sforzando window to make it read a definition file. That takes two permissions. Please turn these on yourself.
+1. Accessibility: choose Open Accessibility Settings in the Actions menu. This opens Privacy & Security, Accessibility in System Settings. Turn on PT SFZ Builder in the list. If it is not in the list, use the Add button (+) below the list and choose the app in the Applications folder
+2. Automation (System Events): the first time the app reads Pro Tools windows, macOS asks whether PT SFZ Builder may control System Events. Choose Allow. If you refused, go to Privacy & Security, Automation in System Settings, and turn on System Events under PT SFZ Builder
+
+Without permission, the Check Assignment Target button's name and the speech tell you where to go and what to turn on. Reopen the app after giving permission.
+
+- After replacing the app with a new version
+
+This app is not signed with a developer certificate, so macOS treats a new version as a different app. In the Accessibility list, remove PT SFZ Builder (select it and use the Remove button (-) below the list), then add it again.
+When you choose files in the Documents, Desktop or Downloads folders or on an external drive, you may be asked whether PT SFZ Builder may access those files. Choose Allow.
+
+-- 3.4 Install sforzando
+
+1. Get the macOS version from Plogue's page (https://www.plogue.com/products/sforzando.html). You will use it in Pro Tools, so install the AAX version
+2. Create an instrument track in your Pro Tools session and insert sforzando
+3. Keep the sforzando plugin window open. This app looks at the open sforzando window to decide where to assign
+
+VoiceOver cannot read the sforzando window. This app performs the loading for you (chapter 10).
+
+-- 3.5 ffmpeg and rubberband (to keep a loop's speed)
+
+To spread a loop across the keyboard while keeping its speed (9.2) and to match the session tempo (9.4), the app makes files with a changed length and the same pitch. It uses ffmpeg for this. If rubberband is also there, the app uses that instead, and the sound is better. Install them with Homebrew by running this one line in Terminal.
+brew install ffmpeg rubberband
+The app looks in the Homebrew folders (/opt/homebrew/bin and /usr/local/bin). Reopen the app after installing. You need neither of them just to spread a one-shot across the keyboard or to build a drum kit.
+
+== 4. Getting started: build the Splice index
+
+When the app opens, the focus is in the search word field. To search your Splice samples, first build the list of samples (the index).
+1. Press Command-R (Update Splice Index in the Actions menu). You hear “Updating the index. You will be told when it finishes.”
+2. When it finishes, you hear the count (for example, “Index updated. 3127 samples, 3127 read again.”). The first time can take tens of seconds, depending on the number of samples. You can keep using the app in the meantime
+
+The Splice folder is usually Splice, then sounds, then packs, in your home folder. If you moved it in the Splice app's settings, use Choose Splice Folder in the Actions menu. You can also choose the Splice folder itself (the sounds/packs folder inside it is used). Choosing a folder rebuilds the index for that folder.
+After adding samples, press Command-R again. Samples unchanged since the last index are not read again, so later updates take about a second.
+Without Splice, you can assign your own sounds with Choose a File to Assign in the Actions menu (9.6).
+
+== 5. The basic workflow
+
+1. In Pro Tools, insert sforzando on an instrument track, and keep that sforzando window open
+2. Find a sample in this app (chapter 7) and press Space in the result list to preview it (chapter 8)
+3. When you have decided, press Return in the list. The app looks at the sforzando window in front and assigns the sample to that track, then reads the result (for example, “The mapping is “Spread across the keyboard”. Assigned BOS_ADJ_Bass_Synth_One_Shot_Heya_F.wav, root key F3, the whole keyboard to sforzando slot 1. Track “Inst1”. Written. It applies automatically. Root key F3, from F in the file name.”)
+4. Only the first time you assign on that track, press the Load into Plugin button (chapter 10). This takes about 10 seconds
+5. Play your MIDI keyboard to check
+6. Choose the next sample and press Return. From the second time on, assigning alone changes the sound in sforzando (sforzando watches the folder of the definition file and reads it again automatically when it changes)
+
+To add a track, insert sforzando on another instrument track, open its window and assign. Each track uses its own slot (definition file; see chapter 11).
+
+== 6. The window layout
+
+From the top, the window has the search fields (search word, key, include the relative key, BPM, type, pack and Search), the result list, the buttons that run things, and the status line.
+These are the places Tab stops in the main window, in order. The name is the first sentence of what VoiceOver reads. Shift-Tab goes back in reverse order. The table has 13 rows and 3 columns: “Order”, “Spoken name” and “Kind”.
+- Order: 1 / Spoken name: Search word / Kind: Text field
+- Order: 2 / Spoken name: Key / Kind: Pop-up menu
+- Order: 3 / Spoken name: Include the relative key / Kind: Checkbox
+- Order: 4 / Spoken name: BPM / Kind: Text field
+- Order: 5 / Spoken name: Type / Kind: Pop-up menu
+- Order: 6 / Spoken name: Pack / Kind: Pop-up menu
+- Order: 7 / Spoken name: Search / Kind: Button
+- Order: 8 / Spoken name: Result list / Kind: List
+- Order: 9 / Spoken name: Assign Settings / Kind: Button
+- Order: 10 / Spoken name: Assign / Kind: Button
+- Order: 11 / Spoken name: Load into Plugin / Kind: Button
+- Order: 12 / Spoken name: Choose a File to Assign / Kind: Button
+- Order: 13 / Spoken name: Check Assignment Target / Kind: Button
+
+Tab stops on buttons only when macOS keyboard navigation is on (the Keyboard section of System Settings). VoiceOver navigation (VO-Right Arrow) always reaches them. Buttons can be pressed with Return or Space.
+Button names include the current state. For example: “Assign Settings. Now: Match the sample, the sample's own tempo”, “Check Assignment Target. Now: sforzando on track “Inst1”. The session is “261024_1”.”, and “Load into Plugin. Needed now”. The status line at the bottom shows the last result.
+
+== 7. Finding samples
+
+-- 7.1 Search conditions
+
+Fill in the fields, then press Return in the search word or BPM field, or press Search. You hear the number found and what was searched (for example, “1 sample found. Search: word “bass”.”). If nothing is found, a low sound plays. Samples must meet all the conditions.
+- Search word: looks in the file name, the pack name and the description. Separate several words with spaces to find only samples containing them all. Upper and lower case are treated the same, and full-width letters also match
+- Key: uses the key written in the file name. With Include the relative key checked, the relative key is included too (C major for A minor)
+- BPM: uses the BPM written in the file name, plus or minus 4. If empty, it is not used
+- Type: One-shot, Loop or FX
+- Pack: a Splice pack. Only samples from that pack are found
+
+-- 7.2 How the type is decided
+
+The type looks at the length first. A sound longer than 2 seconds counts as a loop, whatever its file name says. A sound of 2 seconds or less follows the file name (words such as one shot or loop). FX is not changed by length. The types read in the list are decided the same way.
+
+-- 7.3 Pack order
+
+Command-Shift-G changes the order of the pack field in turn. The table has 4 rows and 3 columns: “Order”, “Direction” and “Good for”.
+- Order: Most samples first (default) / Direction: Most first / Good for: When you have nothing particular in mind
+- Order: By name / Direction: Alphabetical / Good for: When you remember the name. You can jump by first letter
+- Order: Newest update first / Direction: Newest first / Good for: Finding a pack you touched recently
+- Order: Order added / Direction: Oldest first / Good for: Going through packs in the order you added them
+
+The order you choose is remembered the next time you open the app. A pack selected in the field stays selected when the order changes.
+
+-- 7.4 The result list
+
+The Up and Down arrows move between samples. A letter key jumps to the sample starting with that letter. Command-I brings you back to the list from anywhere. If nothing is selected when you arrive, the first sample is selected.
+Command-C copies the path of the selected sample. In a text field such as the search word, it copies the selected text.
+
+== 8. Previewing
+
+In the result list, press Space to play the selected sample. Press it again to stop. Pressing Space on another sample while one is playing switches to it. Assigning stops the preview first.
+
+== 9. Assigning
+
+-- 9.1 The assignment target
+
+The target is the track of the sforzando window open in Pro Tools. The app checks again each time you press Return, so open the sforzando window of the track you want first. Command-T (Check Assignment Target Again) tells you the current target. Pro Tools can stay behind this app.
+If several plugin windows are open, the frontmost sforzando window is used. If no sforzando window is open, you hear “No plugin window is open” and nothing is assigned.
+
+-- 9.2 Mapping (how samples are arranged)
+
+Choose it in Assign Settings (Command-S). The table has 4 rows and 3 columns: “Mapping”, “Arrangement” and “Best for”.
+- Mapping: Match the sample (default) / Arrangement: Chooses one of the next three when assigning: keeping speed for a loop, One sample per key when two or more are selected, and Spread across the keyboard otherwise. The app says which it chose / Best for: When unsure
+- Mapping: Spread across the keyboard / Arrangement: Spreads one sound across all keys. The root key plays the original pitch, and speed changes along with pitch as you move away / Best for: One-shots
+- Mapping: Spread across the keyboard, keeping speed / Arrangement: Makes files with a changed length for each key in advance (prepared files). Every key plays at the original speed, and only the pitch changes. Only the chosen range around the root key sounds (1 octave up and down, 25 keys, by default) / Best for: Loops and phrases
+- Mapping: One sample per key / Arrangement: Puts the selected sounds on one key each, going up by semitones from C1. They play to the end even after you release the key / Best for: Drum kits
+
+Keeping speed takes a few seconds while the prepared files are made. Before starting, you hear “Preparing 25 keys. Please wait.” Assigning the same sample with the same range again does not remake them. For a stereo sample of about 13 seconds, the prepared files take about 90 megabytes each time (chapter 12).
+
+-- 9.3 Root key
+
+The root key is the key that plays the original pitch. By default (Auto), it is decided from the key in the file name (such as Amin or F). If it cannot be read, C3 is used, and you hear “The key could not be estimated, so this is the default. Play it to check, and change it if needed.” The app says how it decided each time you assign.
+Note names count middle C as C3 (MIDI note 60), the same as Pro Tools. The key in a file name has no octave, so it is placed from C3 to B3. If that is wrong, choose the root key and octave in Assign Settings. A drum kit does not use a root key.
+
+-- 9.4 Matching the session tempo
+
+Enter a number (20 to 400) for Session tempo in Assign Settings to change the sample's length so that it plays at that tempo. The sample's original tempo is read from the file name (written like _145_ or 120bpm). Samples whose tempo cannot be read stay unchanged, and the app says so. If the field is empty, samples keep their own tempo.
+- The tempo you enter is remembered for each Pro Tools session. Reopening a session brings back its value
+- With Allow treating a tempo as double or half checked, the original tempo may be treated as double or half when stretching would go past 1.5 times. A 170 BPM sample can be used as is in an 85 BPM session
+- When stretching goes past 1.5 times, the app warns that the sound may become rough
+- With Spread across the keyboard, only the root key matches the tempo (the app says so). To match on every key, use keeping speed
+- With One sample per key, each sample is matched to the tempo. One-shots are not changed
+
+-- 9.5 Tone
+
+Choose one of five combinations for Tone in Assign Settings. The table has 5 rows and 2 columns: “Tone” and “What it does”.
+- Tone: As is (default) / What it does: Starts at once and fades 0.08 seconds after release. No filter
+- Tone: Soft attack / What it does: Takes 0.15 seconds to start and fades 0.3 seconds after release
+- Tone: Cut short / What it does: Fades out in 0.12 seconds (holding the key does not extend it)
+- Tone: Muffled / What it does: Cuts above 800 hertz (low-pass, 12 dB per octave)
+- Tone: One-shot / What it does: Fades 0.02 seconds after release
+
+Finer sound shaping is expected to be done with plugins in Pro Tools.
+
+-- 9.6 Choosing a file to assign
+
+Choose a File to Assign in the Actions menu (or the button of the same name) also assigns sounds from outside Splice. You can choose WAV, AIFF, FLAC and OGG files. If you choose several, Match the sample uses One sample per key (a drum kit). In the file selection window, Shift with the Up and Down arrows selects several in a row, and Command-A selects everything in the folder.
+
+-- 9.7 Items in Assign Settings (Command-S)
+
+These are the items in the Assign Settings window (Command-S), in Tab order, with the first sentence of what VoiceOver reads and the value when the app is first opened. The table has 9 rows and 3 columns: “Spoken name”, “Kind” and “Initial value”.
+- Spoken name: Mapping / Kind: Pop-up menu / Initial value: Match the sample
+- Spoken name: Range when keeping speed / Kind: Pop-up menu / Initial value: 1 octave up and down, 25 keys
+- Spoken name: Session tempo / Kind: Text field / Initial value: Empty
+- Spoken name: Allow treating a tempo as double or half / Kind: Checkbox / Initial value: Checked
+- Spoken name: Root key / Kind: Pop-up menu / Initial value: Auto
+- Spoken name: Octave / Kind: Pop-up menu / Initial value: 3
+- Spoken name: Tone / Kind: Pop-up menu / Initial value: As is
+- Spoken name: Cancel / Kind: Button / Initial value: No value
+- Spoken name: OK / Kind: Button / Initial value: No value
+
+Return confirms and closes (on the Cancel button, it cancels). Escape or Command-W closes without changing anything. When you confirm, the app reads the current settings, and they also appear in the name of the Assign Settings button.
+
+== 10. Loading into sforzando (once for each slot)
+
+Assigning only writes the definition file (slot) for that track. Only the first time you assign to the sforzando on a track, sforzando needs to be told to read that file. After that, sforzando reads it again automatically each time you assign.
+1. Keep the sforzando window of the assigned track open in Pro Tools
+2. Press the Load into Plugin button (or the same item in the Actions menu). You hear “Loading into the plugin. This takes about 10 seconds.”
+3. The app brings Pro Tools to the front, presses the sforzando window, and enters the file location in the file selection window. Do not touch the keyboard or mouse during this time
+4. When it finishes, the app comes back and says, for example, “Loaded into sforzando on track “Inst1”.”
+
+The button's name tells you whether it is needed (“Needed now” or “Not needed now”). The app decides by reading sforzando's log. When it is not needed the button cannot be pressed, but the item in the Actions menu always works (for example, to load again just in case after reopening Pro Tools).
+
+-- What the app does for safety
+
+- It presses only the sforzando window of the assigned track. If only another track's window is open, it does not press, and tells you which track's window to open
+- It brings that window all the way to the front and checks that it is there before pressing. It does not press if the position falls outside the window
+- If the window is built differently from the sforzando version the author checked, it does not press (you hear “This sforzando version seems to differ from the one this app was checked with”)
+- If sforzando is showing an error message (such as a sample not found), pressing has no effect, so the app closes that message first
+- The file location is entered through the clipboard. The clipboard contents are put back afterward (only text; images and the like are not restored)
+
+== 11. Slots and Pro Tools sessions
+
+A definition file is called a slot. Each track name uses one slot, and assigning again on the same track rewrites that slot. One session can use up to 16 tracks.
+Slots are kept in a separate folder for each Pro Tools session. Pro Tools gives new sessions the same track names, such as Inst1, so without this, assigning in one session would rewrite the sound in another. The session name is read from the name of the Pro Tools Edit or Mix window.
+Command-Shift-L reads the slots used in the current session (for example, “Session “261024_1”. 1 slot in use. Slot 1, Inst1, Vocal_Chop_7.wav, root key C3, the whole keyboard.”).
+
+-- sforzando remembers only the file location
+
+A Pro Tools session saves only the location of the definition file, not its contents. Reopening a session plays whatever the file holds at that time. Do not move or delete the files in the app's folder (chapter 15). Sessions using them will stop making sound.
+
+== 12. Cleaning up prepared files
+
+Prepared files made by keeping speed and by matching tempo build up. Clean Up Unused Prepared Files in the Actions menu deletes those not used by a slot in any session.
+1. When you choose it, the app reads the number and size of the unused files and asks whether to delete them
+2. Yes deletes them and tells you how many and how much space was freed. No does nothing
+
+The app counts again just before deleting and does not delete anything that came into use in the meantime. If even one definition file cannot be read, it stops the cleanup so that it does not delete a file that is needed.
+
+== 13. Keyboard commands and menus
+
+The command keys match the author's other apps. No letter keys without a modifier are used, so you can type a first letter in a list to jump.
+This is the same as the Keyboard Commands list in the app (Command-Shift-K). The table has 20 rows and 3 columns: “Where”, “Key” and “What it does”.
+- Where: Search word field / Key: Return / What it does: Run the search
+- Where: BPM field / Key: Return / What it does: Run the search
+- Where: Result list / Key: Up and Down arrows / What it does: Move between samples
+- Where: Result list / Key: Letter keys / What it does: Move to the sample starting with that letter
+- Where: Result list / Key: Space / What it does: Play or stop the preview
+- Where: Result list / Key: Return / What it does: Assign the selected sample
+- Where: Buttons / Key: Return / What it does: Press the button. Space also works
+- Where: Anywhere / Key: Tab / What it does: Move to the next field. Shift-Tab moves back
+- Where: Anywhere / Key: Command-S / What it does: Open Assign Settings: mapping, tempo, root key and tone
+- Where: Anywhere / Key: Command-T / What it does: Check the assignment target again by looking at the sforzando window in front
+- Where: Anywhere / Key: Command-R / What it does: Update the Splice index so that new samples can be found
+- Where: Anywhere / Key: Command-C / What it does: Copy the path of the selected sample. In a text field, copies the selected text
+- Where: Anywhere / Key: Command-I / What it does: Move to the result list
+- Where: Anywhere / Key: Command-Shift-G / What it does: Change the pack order: most samples first, by name, newest update first, order added
+- Where: Anywhere / Key: Command-Shift-L / What it does: Read the list of slots
+- Where: Anywhere / Key: Command-Shift-K / What it does: Open this list of keyboard commands
+- Where: Anywhere / Key: Command-Q / What it does: Quit PT SFZ Builder
+- Where: Assign Settings / Key: Return / What it does: Confirm and close. On a button, presses that button
+- Where: Assign Settings / Key: Escape or Command-W / What it does: Close without changing anything
+- Where: Keyboard Commands / Key: Escape or Return / What it does: Close
+
+These are the items in the menu bar. Press VO-M to move to the menu bar, and use the Left and Right arrows to choose a menu. Items with a key work with that key from any field. The table has 17 rows and 3 columns: “Menu”, “Item” and “Key”.
+- Menu: Actions / Item: Assign Settings / Key: Command-S
+- Menu: Actions / Item: Assign / Key: None (choose from the menu)
+- Menu: Actions / Item: Preview Play/Stop / Key: None (choose from the menu)
+- Menu: Actions / Item: Check Assignment Target Again / Key: Command-T
+- Menu: Actions / Item: Load into Plugin / Key: None (choose from the menu)
+- Menu: Actions / Item: Choose a File to Assign / Key: None (choose from the menu)
+- Menu: Actions / Item: Copy Path / Key: Command-C
+- Menu: Actions / Item: Update Splice Index / Key: Command-R
+- Menu: Actions / Item: Choose Splice Folder / Key: None (choose from the menu)
+- Menu: Actions / Item: Change Pack Order / Key: Command-Shift-G
+- Menu: Actions / Item: Clean Up Unused Prepared Files / Key: None (choose from the menu)
+- Menu: Actions / Item: Move to Result List / Key: Command-I
+- Menu: Actions / Item: Slot List / Key: Command-Shift-L
+- Menu: Actions / Item: Open Accessibility Settings / Key: None (choose from the menu)
+- Menu: Actions / Item: Quit / Key: Command-Q
+- Menu: Help / Item: Keyboard Commands / Key: Command-Shift-K
+- Menu: Help / Item: Version Information / Key: None (choose from the menu)
+
+On macOS, Quit moves to the PT SFZ Builder menu at the far left of the menu bar (Command-Q works everywhere). Keyboard Commands in the Help menu opens the same list as the table above, in a window you can read line by line with the Up and Down arrows. Version Information shows the app's version and build date.
+
+== 14. Notification sounds and speech
+
+A short sound plays before the speech. The table has 3 rows and 2 columns: “When” and “Sound”.
+- When: A search, preparing files, updating the index or loading starts / Sound: A very short sound (accepted)
+- When: Something succeeds, or a search finds samples / Sound: A bright sound
+- When: Something fails, or a search finds nothing / Sound: A low sound
+
+Result sentences are read by asking VoiceOver to speak them, so you hear them even if the focus stays where it is. After a menu key, there is a short pause so that VoiceOver can finish reading the menu item. After loading, the app comes back to the front before speaking.
+
+== 15. Files the app creates
+
+Everything the app creates goes in SFZBuilder, in the Music folder of your home folder. The table has 6 rows and 3 columns: “Item”, “Location” and “Can it be deleted?”. In the locations, “~” is your home folder.
+- Item: Slots (definition files) and their list (the ledger) / Location: slot01.sfz and so on, and ledger.json, in ~/Music/SFZBuilder/(session name)/ / Can it be deleted?: Do not delete. That session would stop making sound
+- Item: Session tempo / Location: ~/Music/SFZBuilder/(session name)/session.json / Can it be deleted?: Deleting it empties the field
+- Item: Prepared files (files with a changed length) / Location: ~/Music/SFZBuilder/rendered/ / Can it be deleted?: Delete them with Clean Up Unused Prepared Files in the app (deleting ones in use silences those keys)
+- Item: Pack order and Splice folder / Location: ~/Music/SFZBuilder/session.json / Can it be deleted?: Deleting it restores the defaults
+- Item: Splice index / Location: ~/Music/SFZBuilder/splice_index.json / Can it be deleted?: Yes (rebuild it with Command-R)
+- Item: Log / Location: ~/Library/Logs/SfzBuilder.log / Can it be deleted?: Yes
+
+The app never changes or deletes your Splice samples themselves. Prepared files are made as separate files.
+
+== 16. Troubleshooting
+
+-- You hear “Could not check the plugin windows. ... permission is missing”
+
+Do as it says and turn on Accessibility or Automation in System Settings (3.3). After replacing the app with a new version, remove it from the Accessibility list and add it again.
+
+-- You hear “No plugin window is open” or “This is not a plugin that can be assigned”
+
+In Pro Tools, open the sforzando window of the track you want to assign. Plugins other than sforzando (such as Decent Sampler) cannot be assigned.
+
+-- You hear “Pro Tools is not running”
+
+Open Pro Tools and a session, then check again with Command-T.
+
+-- Assigning does not change the sound
+
+The sforzando on that track may not have read the file yet. Press Load into Plugin (chapter 10). If the button's name says “Needed now”, loading is needed.
+
+-- You hear “Neither ffmpeg nor rubberband is installed”
+
+Install ffmpeg with Homebrew as in 3.5 and reopen the app. For a one-shot, you can assign without ffmpeg by setting the mapping to Spread across the keyboard.
+
+-- You hear “This sforzando version seems to differ from the one this app was checked with”
+
+The sforzando window is built differently from the version the author checked (1.982), so the positions to press would not match. For safety, the app does not load. Please tell the author.
+
+-- You hear “The Splice index does not exist yet or cannot be read”
+
+Build the index with Command-R (chapter 4). If you hear “The Splice folder was not found”, choose it again with Choose Splice Folder in the Actions menu.
+
+-- The pitch is wrong
+
+The root key could not be read from the file name, or the octave is different. Choose the root key and octave in Assign Settings (Command-S) and assign again (9.3).
+
+-- With keeping speed, keys at the ends do not sound
+
+Keys outside the prepared range do not sound. Widen Range when keeping speed in Assign Settings (up to 2 octaves up and down) and assign again.
+
+-- You cannot hear the speech
+
+Check that VoiceOver is on. The status line at the bottom shows the last result.
+
+-- If you still cannot tell what is wrong
+
+The log (~/Library/Logs/SfzBuilder.log) holds the times the app started and any errors.
+
+== 17. Removing the app
+
+1. Quit the app (Command-Q) and move “PT SFZビルダー.app” (shown as PT SFZ Builder on a Mac in English) from the Applications folder to the Trash
+2. Remove PT SFZ Builder from the Accessibility and Automation lists
+3. To delete the slots and settings, move ~/Music/SFZBuilder to the Trash. However, Pro Tools sessions using those slots will stop making sound (chapter 11). The log is ~/Library/Logs/SfzBuilder.log
+
+== 18. Limits and cautions
+
+- The app does not run on Intel Macs
+- Only sforzando can be assigned, not Decent Sampler or other plugins
+- Loading works by pressing fixed positions in the sforzando window. If the window is built differently from the version the author checked (1.982), the app does not press
+- Do not touch the keyboard or mouse during loading (about 10 seconds). Pro Tools comes to the front
+- The root key's octave cannot be decided from the file name. It is placed in the C3 range, so choose again if that is wrong
+- A sample's BPM and key are read from the file name. Samples without them in the name cannot be matched to a tempo
+- With keeping speed, keys outside the prepared range do not sound. The more a sample is stretched, the rougher it sounds; past 1 octave it becomes noticeable
+- When the session name cannot be read (the Edit and Mix windows are closed), slots go in a place shared by all sessions. In that case, the sound of a track with the same name in another session may be rewritten
+- Do not create two tracks with the same name in one session. Slots are decided by track name
+- Undo (Command-Z) does not work in text fields (because of how the window's controls are built)
+- Changing the Pro Tools tempo after assigning is not followed. Enter the tempo again and assign again
+- Slot descriptions read by Command-Shift-L stay in the language they were assigned in
+
+== 19. Made with AI
+
+This software was made by the author (Takahashi) using AI (Anthropic's Claude), under the author's direction and judgment. Most of the program code and of the text, including this manual, was written by the AI. Behavior with Pro Tools, sforzando and VoiceOver was checked on the author's Mac. The English text has been checked by tests but has not been heard with English VoiceOver by the author.
+Parts made by AI may not be protected by copyright under the laws of some countries or regions. The license is granted to the extent of the rights the author may hold (chapter 20).
+
+== 20. License
+
+This software is distributed under the MIT License. The copyright notice is “Copyright (c) 2026 Takahashi”. You can use, copy, change, distribute and sell it free of charge. When distributing it, include the copyright notice and the permission text. There is no warranty. The author is not responsible for anything that happens through its use. The full text is in “ライセンス.txt” (the license) in the distribution.
+The app contains parts made by others, such as Python, wxPython, PyObjC and just_playback. Their terms are in “同梱部品のライセンス.txt” (third-party licenses).
+Pro Tools is a product of Avid Technology, sforzando of Plogue, Splice of Splice, and VoiceOver of Apple Inc. This app is not affiliated with those companies.
+
+== 21. Version history
+
+- 1.0.0 (2026-11-03): First release. The window, speech and manual are in Japanese and English

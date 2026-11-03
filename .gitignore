@@ -1,0 +1,8 @@
+.DS_Store
+__pycache__/
+*.pyc
+build/
+dist/
+*.app/
+# ソースから動かしたときの素材の索引（借りている部品が自分の隣に書く）
+siblings/*/data/

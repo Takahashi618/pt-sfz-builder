@@ -1,0 +1,10 @@
+/* PT SFZビルダー: 日本語の名前と許可の説明（Mac の言語が日本語のとき）。 */
+"CFBundleName" = "PT SFZビルダー";
+"CFBundleDisplayName" = "PT SFZビルダー";
+"NSAccessibilityUsageDescription" = "Pro Tools のプラグインの画面を読み、VoiceOver から届かない sforzando の画面を押して、定義ファイルを読み込ませるために使います。";
+"NSAppleEventsUsageDescription" = "Pro Tools で開いているプラグインの画面（どのトラックの sforzando か）を読み、sforzando に定義ファイルを読み込ませるために、System Events を操作します。";
+"NSDesktopFolderUsageDescription" = "デスクトップに置いたサンプルを割り当てるために使います。";
+"NSDocumentsFolderUsageDescription" = "書類フォルダに置いたサンプルを割り当てるために使います。";
+"NSDownloadsFolderUsageDescription" = "ダウンロードしたサンプルを割り当てるために使います。";
+"NSRemovableVolumesUsageDescription" = "外付けドライブに置いたサンプル（Splice のフォルダなど）を割り当てるために使います。";
+"NSNetworkVolumesUsageDescription" = "ネットワーク上のフォルダに置いたサンプルを割り当てるために使います。";
