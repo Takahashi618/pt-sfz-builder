@@ -124,7 +124,7 @@ _PACK_ORDER_LABELS: dict[str, str] = tr(
     {
         PACK_ORDER_COUNT: "most samples first",
         PACK_ORDER_NAME: "by name",
-        PACK_ORDER_MTIME: "newest update first",
+        PACK_ORDER_MTIME: "recently updated first",
         PACK_ORDER_ADDED: "order added, oldest first",
     },
 )
@@ -786,7 +786,7 @@ class AppController:
             return Outcome(
                 False, tr(
                     f"{form.describe_ja()} に合う素材はありませんでした。",
-                    f"No samples match. Search: {form.describe_ja()}.",
+                    f"No samples found. Search: {form.describe_ja()}.",
                 )
             )
         return Outcome(True, tr(

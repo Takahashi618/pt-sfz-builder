@@ -70,7 +70,7 @@ KEY_HELP: list[tuple[str, str, str]] = [
     )),
     (_ANYWHERE, tr("コマンド+シフト+G", "Command-Shift-G"), tr(
         "パックの並び順を順送りする。中身の多い順、名前順、更新の新しい順、追加した順",
-        "Change the pack order: most samples first, by name, newest update first, order added",
+        "Change the pack order: most samples first, by name, recently updated first, order added",
     )),
     (_ANYWHERE, tr("コマンド+シフト+L", "Command-Shift-L"), tr(
         "スロットの一覧を読み上げる",

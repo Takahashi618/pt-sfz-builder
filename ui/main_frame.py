@@ -254,7 +254,7 @@ class MainFrame(wx.Frame):
             tr("パックの並び順を順送り\tCtrl+Shift+G", "Change Pack Order\tCtrl+Shift+G"),
             tr(
                 "中身の多い順、名前順、更新の新しい順、追加した順",
-                "Most samples first, by name, newest update first, order added",
+                "Most samples first, by name, recently updated first, order added",
             ),
         )
         ops.Append(self._id_clean, tr(

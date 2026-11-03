@@ -1,6 +1,6 @@
 ﻿PT SFZ Builder Manual
 
-Version 1.0.0. The author is Takahashi. This software and this manual were made with AI (Anthropic's Claude; see chapter 19).
+Version 1.0.1. The author is Takahashi. This software and this manual were made with AI (Anthropic's Claude; see chapter 19).
 Contents. There are 21 chapters.
 1. What this app does
 2. Requirements
@@ -56,7 +56,7 @@ The app's window and speech follow your Mac's language settings. The app uses wh
 
 -- 3.1 Put the app in place
 
-1. Open the zip file you received in Finder (select it and press Command-O). A folder named “PT SFZビルダー_1.0.0” appears in the same place
+1. Open the zip file you received in Finder (select it and press Command-O). A folder named “PT SFZビルダー_1.0.1” appears in the same place
 2. Move “PT SFZビルダー.app” from that folder to the Applications folder. When your Mac is in English, Finder shows it as PT SFZ Builder. In Finder, select the app and press Command-C, then press Option-Command-V in the Applications folder to move it
 3. The manual and the other documents can go anywhere
 
@@ -168,7 +168,7 @@ The type looks at the length first. A sound longer than 2 seconds counts as a lo
 Command-Shift-G changes the order of the pack field in turn. The table has 4 rows and 3 columns: “Order”, “Direction” and “Good for”.
 - Order: Most samples first (default) / Direction: Most first / Good for: When you have nothing particular in mind
 - Order: By name / Direction: Alphabetical / Good for: When you remember the name. You can jump by first letter
-- Order: Newest update first / Direction: Newest first / Good for: Finding a pack you touched recently
+- Order: Recently updated first / Direction: Newest first / Good for: Finding a pack you touched recently
 - Order: Order added / Direction: Oldest first / Good for: Going through packs in the order you added them
 
 The order you choose is remembered the next time you open the app. A pack selected in the field stays selected when the order changes.
@@ -296,7 +296,7 @@ This is the same as the Keyboard Commands list in the app (Command-Shift-K). The
 - Where: Anywhere / Key: Command-R / What it does: Update the Splice index so that new samples can be found
 - Where: Anywhere / Key: Command-C / What it does: Copy the path of the selected sample. In a text field, copies the selected text
 - Where: Anywhere / Key: Command-I / What it does: Move to the result list
-- Where: Anywhere / Key: Command-Shift-G / What it does: Change the pack order: most samples first, by name, newest update first, order added
+- Where: Anywhere / Key: Command-Shift-G / What it does: Change the pack order: most samples first, by name, recently updated first, order added
 - Where: Anywhere / Key: Command-Shift-L / What it does: Read the list of slots
 - Where: Anywhere / Key: Command-Shift-K / What it does: Open this list of keyboard commands
 - Where: Anywhere / Key: Command-Q / What it does: Quit PT SFZ Builder
@@ -426,4 +426,5 @@ Pro Tools is a product of Avid Technology, sforzando of Plogue, Splice of Splice
 
 == 21. Version history
 
+- 1.0.1 (2026-11-03): Stopped putting each control's name in its help text as well, so VoiceOver does not say the same thing twice. Hidden files on external drives (names starting with ._) are no longer listed as samples. The number of files that could not be read is now reported correctly. English wording now matches the author's other apps
 - 1.0.0 (2026-11-03): First release. The window, speech and manual are in Japanese and English

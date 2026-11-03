@@ -275,6 +275,8 @@ with tempfile.TemporaryDirectory() as tmp:
     # `EVT_LISTBOX` を出さないので、検索直後の先頭の項目
     # （いちばん押される経路）に効かなかった。
     c.equal("既定は素材に合わせる", frame.form.mode, MODE_AUTO)
+    # 名前が付いたら同じ文をヒントへ入れない（VoiceOver が 2 回読む）
+    c.equal("読み上げ名はヒントへ重ねない", frame._search_btn.GetToolTipText(), "")
     c.check(
         "設定ボタンにも出る",
         "素材に合わせる" in frame._settings_btn.GetName(),

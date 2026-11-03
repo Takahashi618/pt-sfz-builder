@@ -8,7 +8,7 @@ VoiceOver とキーボードだけで使えるように作っています。名�
 
 - 動く環境: Apple シリコン（M1 以降）の Mac、macOS 15 以降、Pro Tools、sforzando の AAX 版（無料）、VoiceOver。
   作者は macOS 15.7.8、Pro Tools 2026.4.1、sforzando 1.982 で確かめています
-- 使うだけなら: [Releases](https://github.com/Takahashi618/pt-sfz-builder/releases) にある `PTSFZBuilder_1.0.0.zip`（表示名は PT SFZビルダー_1.0.0.zip）を開き、中の「はじめにお読みください.txt」を読んでください
+- 使うだけなら: [Releases](https://github.com/Takahashi618/pt-sfz-builder/releases) にある `PTSFZBuilder_1.0.1.zip`（表示名は PT SFZビルダー_1.0.1.zip）を開き、中の「はじめにお読みください.txt」を読んでください
 - 使い方: [docs/manual.txt](docs/manual.txt)（HTML 版は [docs/manual.html](docs/manual.html)。ダウンロードしてブラウザで開きます）
 - ライセンス: MIT ライセンス（Copyright (c) 2026 Takahashi）。全文は [LICENSE.txt](LICENSE.txt)。
   配布版のアプリに入っているほかの人の部品の条件は [同梱部品のライセンス.txt](同梱部品のライセンス.txt)
@@ -55,7 +55,7 @@ The app's window and speech follow your Mac's language settings: English or Japa
 
 - Requirements: a Mac with Apple silicon (M1 or later), macOS 15 or later, Pro Tools, the AAX version of sforzando (free), VoiceOver.
   Tested on macOS 15.7.8, Pro Tools 2026.4.1, and sforzando 1.982
-- To use it: open `PTSFZBuilder_1.0.0.zip` from [Releases](https://github.com/Takahashi618/pt-sfz-builder/releases) and read “README (English).txt” inside
+- To use it: open `PTSFZBuilder_1.0.1.zip` from [Releases](https://github.com/Takahashi618/pt-sfz-builder/releases) and read “README (English).txt” inside
 - Manual: [docs/manual_en.txt](docs/manual_en.txt) (HTML version: [docs/manual_en.html](docs/manual_en.html))
 - License: MIT License (Copyright (c) 2026 Takahashi). Full text in [LICENSE.txt](LICENSE.txt).
   Third-party components in the packaged app: [同梱部品のライセンス.txt](同梱部品のライセンス.txt)

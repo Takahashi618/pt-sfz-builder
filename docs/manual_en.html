@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PT SFZ Builder Manual (1.0.0)</title>
+<title>PT SFZ Builder Manual (1.0.1)</title>
 <style>
 body { font-family: -apple-system, "Hiragino Sans", sans-serif; line-height: 1.7; max-width: 46em; margin: 1.5em auto; padding: 0 1em; color: #111; background: #fff; }
 h1 { font-size: 1.6em; }
@@ -24,7 +24,7 @@ code { font-family: Menlo, monospace; background: #f3f3f3; padding: 0 0.2em; }
 </head>
 <body>
 <h1>PT SFZ Builder Manual</h1>
-<p>Version <span class="version">1.0.0</span>. The author is Takahashi. This software and this manual were made with AI (Anthropic's Claude; see <a href="#ai">chapter 19</a>).</p>
+<p>Version <span class="version">1.0.1</span>. The author is Takahashi. This software and this manual were made with AI (Anthropic's Claude; see <a href="#ai">chapter 19</a>).</p>
 
 <nav>
 <p>Contents. There are 21 chapters.</p>
@@ -88,7 +88,7 @@ code { font-family: Menlo, monospace; background: #f3f3f3; padding: 0 0.2em; }
 
 <h3>3.1 Put the app in place</h3>
 <ol>
-<li>Open the zip file you received in Finder (select it and press Command-O). A folder named “PT SFZビルダー_<span class="version">1.0.0</span>” appears in the same place</li>
+<li>Open the zip file you received in Finder (select it and press Command-O). A folder named “PT SFZビルダー_<span class="version">1.0.1</span>” appears in the same place</li>
 <li>Move “PT SFZビルダー.app” from that folder to the Applications folder. When your Mac is in English, Finder shows it as PT SFZ Builder. In Finder, select the app and press Command-C, then press Option-Command-V in the Applications folder to move it</li>
 <li>The manual and the other documents can go anywhere</li>
 </ol>
@@ -207,7 +207,7 @@ code { font-family: Menlo, monospace; background: #f3f3f3; padding: 0 0.2em; }
 <tbody>
 <tr><td>Most samples first (default)</td><td>Most first</td><td>When you have nothing particular in mind</td></tr>
 <tr><td>By name</td><td>Alphabetical</td><td>When you remember the name. You can jump by first letter</td></tr>
-<tr><td>Newest update first</td><td>Newest first</td><td>Finding a pack you touched recently</td></tr>
+<tr><td>Recently updated first</td><td>Newest first</td><td>Finding a pack you touched recently</td></tr>
 <tr><td>Order added</td><td>Oldest first</td><td>Going through packs in the order you added them</td></tr>
 </tbody>
 </table>
@@ -347,7 +347,7 @@ code { font-family: Menlo, monospace; background: #f3f3f3; padding: 0 0.2em; }
 <tr><td>Anywhere</td><td>Command-R</td><td>Update the Splice index so that new samples can be found</td></tr>
 <tr><td>Anywhere</td><td>Command-C</td><td>Copy the path of the selected sample. In a text field, copies the selected text</td></tr>
 <tr><td>Anywhere</td><td>Command-I</td><td>Move to the result list</td></tr>
-<tr><td>Anywhere</td><td>Command-Shift-G</td><td>Change the pack order: most samples first, by name, newest update first, order added</td></tr>
+<tr><td>Anywhere</td><td>Command-Shift-G</td><td>Change the pack order: most samples first, by name, recently updated first, order added</td></tr>
 <tr><td>Anywhere</td><td>Command-Shift-L</td><td>Read the list of slots</td></tr>
 <tr><td>Anywhere</td><td>Command-Shift-K</td><td>Open this list of keyboard commands</td></tr>
 <tr><td>Anywhere</td><td>Command-Q</td><td>Quit PT SFZ Builder</td></tr>
@@ -480,6 +480,7 @@ code { font-family: Menlo, monospace; background: #f3f3f3; padding: 0 0.2em; }
 
 <h2 id="history">21. Version history</h2>
 <ul>
+<li>1.0.1 (2026-11-03): Stopped putting each control's name in its help text as well, so VoiceOver does not say the same thing twice. Hidden files on external drives (names starting with ._) are no longer listed as samples. The number of files that could not be read is now reported correctly. English wording now matches the author's other apps</li>
 <li>1.0.0 (2026-11-03): First release. The window, speech and manual are in Japanese and English</li>
 </ul>
 </body>
